@@ -8,6 +8,9 @@ const WorkoutSchema = new Schema({
     unique: true,
     required: "Workout must have a unique name."
   },
+  current: {
+    type: Boolean
+  },
   exercises: [
     {
       type: Schema.Types.ObjectId,

@@ -28,10 +28,11 @@ router.get("/exercises", (req, res) => {
 
 // retrieves the current workout from the currents collection
 // should only be one.  Uses the first, if more than one retrieved
-router.get("/current", (req, res) => {
-  db.Current.find({})
+router.get("/workouts/current", (req, res) => {
+  console.log("api-routes: /workouts/current")
+  db.Workout.find({"current": true})
     .then(dbWorkout => {
-      console.log("in api-routes, api/current, dbWorkout:");
+      console.log("in api-routes, /workouts/current, dbWorkout:");
       console.log(dbWorkout);
       res.json(dbWorkout);
     })

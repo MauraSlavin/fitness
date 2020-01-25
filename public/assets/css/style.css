@@ -13,6 +13,11 @@ h1 {
     background-color: wheat;
 }
 
+h2 {
+    text-align: center;
+    background-color: lightblue;
+}
+
 /* Space between choices, and nice indenting */
 .choiceSpace {
     margin: 40px;

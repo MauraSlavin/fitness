@@ -3,12 +3,13 @@ function renderHomePage() {
   console.log("In renderHomePage");
 
   // Get _id of current workout from currnets collection
-  $.get("api/current", current => {
+  $.get("api/workouts/current", current => {
     console.log("current:");
     console.log(current);
     console.log("workout: " + current[0].workout);
     // get name of current workout from workouts collection
-    $.get(`api/workout/${current[0].workout}`, workout => {
+    $.get('api/workouts/current', workout => {
+      console.log(workout);
       let hrefEnabled =
         '<a href="workout.html" class="btn btn-default goToCurrent"></a>';
       let btnDisabled =
@@ -37,6 +38,7 @@ function renderHomePage() {
   $.get("api/workouts", workouts => {
     let beginButton = '<br><button class="btn btn-default btnSpace" data-id=';
     let workoutButton = "";
+    console.log("In index.js, api/workouts");
     console.log("workouts:  ");
     console.log(workouts);
     workouts.forEach(workout => {
