@@ -3,16 +3,21 @@ const router = require("express").Router();
 // get internal database models
 const db = require("../models");
 
-// router.post("/submit", ({body}, res) => {
-//   db.Exercise.create(body)
-//     .then(({_id}) => db.Workout.findOneAndUpdate({}, { $push: { exercises: _id } }, { new: true }))
-//     .then(dbWorkout => {
-//       res.json(dbWorkout);
-//     })
-//     .catch(err => {
-//       res.json(err);
-//     });
-// });
+router.post("/workout/:workout", (req, res) => {
+  const body = {
+    name: req.params.workout,
+    current: true
+  };
+  
+  db.Workout.create(body)
+    .then(dbExercise => {
+      res.json(dbExercise);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
 
 // retrieves all exercises in the database (regardless of the workout)
 //   from the exercises collection
@@ -29,8 +34,8 @@ router.get("/exercises", (req, res) => {
 // retrieves the current workout from the currents collection
 // should only be one.  Uses the first, if more than one retrieved
 router.get("/workouts/current", (req, res) => {
-  console.log("api-routes: /workouts/current")
-  db.Workout.find({"current": true})
+  console.log("api-routes: /workouts/current");
+  db.Workout.find({ current: true })
     .then(dbWorkout => {
       console.log("in api-routes, /workouts/current, dbWorkout:");
       console.log(dbWorkout);
@@ -63,6 +68,23 @@ router.get("/workout/:id", (req, res) => {
     })
     .catch(err => {
       res.json(err);
+    });
+});
+
+// deletes all the current fields from the workouts collection
+//   (so nothing is noted as current)
+router.put("/workouts/current", (req, res) => {
+  db.Workout.update(
+    {
+      current: true
+    },
+    { $unset: { current: "" } }
+  )
+    .then(result => {
+      console.log(result);
+    })
+    .catch(error => {
+      console.log(error);
     });
 });
 
