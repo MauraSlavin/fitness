@@ -1,0 +1,29 @@
+body {
+    background-color: rgb(117, 252, 146);
+}
+
+/* Font size for paragraphs */
+p {
+    font-size: 22px;
+}
+
+h1 {
+    text-align: center;
+    color: darkgreen;
+    background-color: wheat;
+}
+
+/* Space between choices, and nice indenting */
+.choiceSpace {
+    margin: 40px;
+}
+
+/* Space between buttons */
+.btnSpace {
+    margin-top: 15px;
+}
+
+/* Space after button to create new workout */
+#createNewWorkout {
+    margin-right: 15px;
+}
