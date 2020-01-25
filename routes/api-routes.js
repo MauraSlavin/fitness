@@ -8,7 +8,7 @@ router.post("/workout/:workout", (req, res) => {
     name: req.params.workout,
     current: true
   };
-  
+
   db.Workout.create(body)
     .then(dbExercise => {
       res.json(dbExercise);
@@ -17,7 +17,6 @@ router.post("/workout/:workout", (req, res) => {
       res.json(err);
     });
 });
-
 
 // retrieves all exercises in the database (regardless of the workout)
 //   from the exercises collection
@@ -34,11 +33,8 @@ router.get("/exercises", (req, res) => {
 // retrieves the current workout from the currents collection
 // should only be one.  Uses the first, if more than one retrieved
 router.get("/workouts/current", (req, res) => {
-  console.log("api-routes: /workouts/current");
-  db.Workout.find({ current: true })
+  db.Workout.findOne({ current: true })
     .then(dbWorkout => {
-      console.log("in api-routes, /workouts/current, dbWorkout:");
-      console.log(dbWorkout);
       res.json(dbWorkout);
     })
     .catch(err => {
@@ -60,7 +56,7 @@ router.get("/workouts", (req, res) => {
 // retrieves a workout and all its exercises given the
 //  _id of the workout
 router.get("/workout/:id", (req, res) => {
-  db.Workout.find({
+  db.Workout.findOne({
     _id: req.params.id
   })
     .then(dbWorkout => {
@@ -71,9 +67,27 @@ router.get("/workout/:id", (req, res) => {
     });
 });
 
+// makes the workout with the given id current
+router.put("/workout/:id", (req, res) => {
+
+  db.Workout.updateOne(
+    {
+      _id: req.params.id
+    },
+    { $set: { current: true } }
+  )
+    .then(result => {
+      res.json(result);
+    })
+    .catch(error => {
+      res.json(error);
+    });
+});
+
 // deletes all the current fields from the workouts collection
 //   (so nothing is noted as current)
 router.put("/workouts/current", (req, res) => {
+
   db.Workout.update(
     {
       current: true
@@ -81,10 +95,10 @@ router.put("/workouts/current", (req, res) => {
     { $unset: { current: "" } }
   )
     .then(result => {
-      console.log(result);
+      res.json(result);
     })
     .catch(error => {
-      console.log(error);
+      res.json(error);
     });
 });
 

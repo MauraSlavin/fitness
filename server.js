@@ -21,7 +21,7 @@ app.use(express.static("public"));
 app.use('/', routes);
 
 // access database
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitnessDB", { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitnessDB", { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 // listen on port

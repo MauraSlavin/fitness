@@ -1,23 +1,28 @@
 // put current workout name and list of workouts on home page
 function renderHomePage() {
-  console.log("In renderHomePage");
 
   // get name of current workout from workouts collection
   $.get("api/workouts/current", workout => {
-    
+
+    // href is enabled if there is a current workout.
     let hrefEnabled =
       '<a href="workout.html" class="btn btn-default goToCurrent"></a>';
+    // the element will be a disabled button if there is no current workout.
     let btnDisabled =
       '<button class="btn btn-default goToCurrent" disabled>No current workout.</button>';
-    // if there is one, put the name on the html page
-    //   and enable the button to go to it
-
+    
+    // if there is a current workout, put the name on the html page
+    //   and enable the button (href) to go to the workout page with that workout
+    // otherwise, it's a disabled button
+    
+    // Don't need the goToCurrent class unless there is a current workout
     $(".goToCurrent").remove();
-    if (workout.length > 0) {
+    if (workout !== null) {
+      // if there is a workout, use the enabled href & goToCurrent class
       $("#btnHref").append(hrefEnabled);
-      $(".goToCurrent").html(workout[0].name);
-
+      $(".goToCurrent").html(workout.name);
     } else {
+      // if no current workout, disable the button
       $("#btnHref").append(btnDisabled);
     }
   });
@@ -28,7 +33,6 @@ function renderHomePage() {
     let workoutButton = "";
 
     workouts.forEach(workout => {
-
       // do NOT include this workout if it is the current one
       if (typeof workout.current === "undefined" || !workout.current) {
         workoutButton = beginButton; // they all start the same
@@ -36,10 +40,9 @@ function renderHomePage() {
         workoutButton += `type="button">${workout.name}</button>`; // finish button elt, incl name of workout on button
         //   workoutButton += '<br>'; // next button on a new line
         $(".addWorkoutList").append(workoutButton); // add the button to the html
-      }; // end of if NOT the current workout
-    });  // end of workouts.forEach
+      } // end of if NOT the current workout
+    }); // end of workouts.forEach
   }); // end of get api/workouts
-
 } // end of renderHomePage function
 
 function createWorkout() {
@@ -50,9 +53,8 @@ function createWorkout() {
     .trim();
   // clear the input field from the html page.
   $("#workout").val("");
-  console.log("workoutName: " + workoutName);
+  
   // take current property off any document (row) that it's now on
-  // use put & update with $unset ??
   $.ajax({
     method: "PUT",
     url: `/api/workouts/current`
@@ -67,19 +69,55 @@ function createWorkout() {
     url: `api/workout/${workoutName}`
   })
     .then(result => {
-      console.log("New workout written.");
-      console.log(result);
       // send user to workout html page
       window.location.href = "workout.html";
     })
     .catch(error => {
       console.log(error);
     });
-}
+} // end of function createWorkout
+
+function goToOldWorkout(id) {
+
+  // Make workout chosen the current workout
+  // first remove old current workout,
+  //    then make this the current workout
+  //    then go to workout page for this workout
+
+  // take current property off any document (row) that it's now on
+  $.ajax({
+    method: "PUT",
+    url: `/api/workouts/current`
+  }).then(result => {
+
+    // update document to make this workout the current one
+    $.ajax({
+      method: "PUT",
+      url: `api/workout/${id}`
+    })
+      .then(result => {
+
+        // send user to workout html page
+        window.location.href = "workout.html";
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  });
+} // end of function goToOldWorkout
 
 // Wait until page is loaded
 $(document).ready(() => {
   renderHomePage();
 
+  // Clicking on current workout is handled in the html.
+
+  // listen for (and handle) when Go! button is clicked to create a new workout
   $("#createNewWorkout").on("click", () => createWorkout());
-});
+
+  // listen for (& handle) when another workout is clicked on
+  $(".addWorkoutList").on("click", ".btnSpace", function(event) {
+    const workoutId = $(this).data("id");
+    goToOldWorkout(workoutId);
+  });
+}); // end of document ready
