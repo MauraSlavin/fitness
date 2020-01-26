@@ -31,10 +31,11 @@ function renderPage() {
       $(".execTableRow").remove();
       let tableElt = "";
       exercises.forEach(exercise => {
-        tableElt = '<tr class="execTableRow">';
+        tableElt = `<tr class="execTableRow" data-id=${exercise._id}>`;
         tableElt += `<td>${exercise.description}</td>`;
         tableElt += `<td>${exercise.unit}</td>`;
         tableElt += `<td>${exercise.reps}</td>`;
+        tableElt += '<td><button class="btn btn-default" id="addExerToWO" type="submit">Add to this workout</button></td>';
         tableElt += "</tr>";
         $(".allExercises").append(tableElt);
       });

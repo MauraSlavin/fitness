@@ -18,6 +18,14 @@ h2 {
     background-color: lightblue;
 }
 
+th {
+    width: 30%;
+}
+
+.wideCol {
+    width: 40%;
+}
+
 /* Space between choices, and nice indenting */
 .choiceSpace {
     margin: 40px;
