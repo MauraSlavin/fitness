@@ -69,12 +69,30 @@ router.get("/workout/:id", (req, res) => {
 
 // makes the workout with the given id current
 router.put("/workout/:id", (req, res) => {
+  console.log("Set this workout to the current workout.  ID: " + req.params.id);
 
   db.Workout.updateOne(
     {
       _id: req.params.id
     },
     { $set: { current: true } }
+  )
+    .then(result => {
+      res.json(result);
+    })
+    .catch(error => {
+      res.json(error);
+    });
+});
+
+// puts the exercise in the workout
+router.put("/workout/:workoutId/:exerciseId", (req, res) => {
+  console.log("Workout ID: " + req.params.workoutId);
+  console.log("Exercise ID: " + req.params.exerciseId);
+
+  db.Workout.findOneAndUpdate(
+    { _id: req.params.workoutId },
+    { $push: { exercises: req.params.exerciseId } }
   )
     .then(result => {
       res.json(result);
