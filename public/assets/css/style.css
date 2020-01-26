@@ -18,6 +18,11 @@ h2 {
     background-color: lightblue;
 }
 
+.home {
+    text-align: left;
+    font-size: 20px;
+}
+
 td, th {
     font-size: 18px;
 }
