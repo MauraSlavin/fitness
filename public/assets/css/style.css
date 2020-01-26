@@ -28,7 +28,12 @@ h2 {
     margin-top: 15px;
 }
 
-/* Space after button to create new workout */
-#createNewWorkout {
-    margin-right: 15px;
+/* Space before button, and highlight */
+#createNewExercise, #createNewWorkout {
+    margin-left: 15px;
+    background-color: rgb(252, 252, 137);
+}
+
+.execTableRow {
+    background-color: palegreen;
 }

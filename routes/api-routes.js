@@ -102,16 +102,46 @@ router.put("/workouts/current", (req, res) => {
     });
 });
 
-// // Populated is a mongoose term, to POPULATE with RELATED data
-// router.get("/populated", (req, res) => {
-//   db.Workout.find({})
-//     .populate("exercises")  // PLURAL
-//     .then(dbWorkout => {
-//       res.json(dbWorkout);
-//     })
-//     .catch(err => {
-//       res.json(err);
-//     });
-// });
+// Populate is a mongoose term, to POPULATE with RELATED data
+router.get("/populated", (req, res) => {
+  db.Workout.find({})
+    .populate("exercises")  
+    .then(dbWorkout => {
+      res.json(dbWorkout);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
+// Write new document to exercises when new exercise added
+router.post("/exercise/:name/:unit/:reps", (req, res) => {
+  const body = {
+    description: req.params.name,
+    unit: req.params.unit,
+    reps: req.params.reps
+  }
+  db.Exercise.create(body)
+    .then(dbExercise => {
+      res.json(dbExercise);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
 
 module.exports = router;
+
+  // const body = {
+  //   name: req.params.workout,
+  //   current: true
+  // };
+
+  // db.Workout.create(body)
+  //   .then(dbExercise => {
+  //     res.json(dbExercise);
+  //   })
+  //   .catch(err => {
+  //     res.json(err);
+  //   });
+

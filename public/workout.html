@@ -17,7 +17,8 @@
         <h1>Welcome to the Fitness Tracker</h1>
         <h2>Workout: <span id=workoutName></span></h2>
 
-        <h3>You may continue to work with this workout, create a new workout, or choose another workout.</h3>
+        <h3>You may continue to work with this workout, add existing exercises to this workout, or add new exercises.
+        </h3>
 
         <!-- List of exercises in this workout -->
         <div class="row choiceSpace">
@@ -79,12 +80,26 @@
             </div>
         </div>
 
-
+        <!-- Line to create a new exercise -->
+        <div class="row choiceSpace">
+            <div class="col-md-offset-2">
+                <p>Create new exercise:</p>
+                <div class="input-group col-xs-10 col-md-8 col-lg-6 col-md-offset-1">
+                    <input type="text" class="form-control" id="exercise" placeholder="New exercise name" autofocus="">
+                    <input type="text" class="form-control" id="unit" placeholder="Unit (weight, miles, meters, etc.)">
+                    <input type="text" class="form-control" id="reps"
+                        placeholder="Reps (number reps, miles, meters, etc.)">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" id="createNewExercise" type="submit">Add New Exercise</button>
+                    </span>
+                </div>
+            </div>
+        </div>
 
         <!-- Ability to add new exercises will be added here. -->
 
 
-        
+
     </div>
 
 
