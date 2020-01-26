@@ -1,4 +1,4 @@
-// Global variables for this page
+// Global variable for this page
 let currentWO = ""; // object of current workout
 
 function renderPage() {
@@ -13,20 +13,31 @@ function renderPage() {
     } else {
       // set global currentWO to the object for the current workout
       currentWO = workouts.find(workout => workout.current === true);
+      console.log("the current workout is: (currentWO):");
+      console.log(currentWO);
       console.log("Current workout name: " + currentWO.name);
       console.log("Current workout ID: " + currentWO._id);
 
+      // put the workout name in the sub-header on the html page
       $("#workoutName").text(currentWO.name);
       //   console.log("workout:");
       //   console.log(workout);
       // display exercises in workout
       // exerciseIds is an array of the _id of each exercise in the workout
-      // let exerciseIds = workout.exercises;
-      // $.get(`api/exercises/${exerciseIds}`, exercises => {
-      //     console.log(exercises);
-      // }).catch((error) => {
-      //     console.log(error);
-      // });
+      $(".execInWOTableRow").remove();
+      let tableElt = "";
+      currentWO.exercises.forEach(exercise => {
+        // put each exercise on the html page
+        console.log("An exercise in the workout:");
+        console.log(exercise);
+
+        tableElt = `<tr class="execInWOTableRow">`;
+        tableElt += `<td>${exercise.description}</td>`;
+        tableElt += `<td>${exercise.unit}</td>`;
+        tableElt += `<td>${exercise.reps}</td>`;
+        tableElt += "</tr>";
+        $(".addExercisesInWO").append(tableElt);
+      });
     } // end of else - there is a current workout
 
     // display all exercises
@@ -56,15 +67,31 @@ function renderPage() {
 function createExercise() {
   // get exercise information from html
 
-  const exerciseName = $("#exercise")
+  let exerciseName = $("#exercise")
     .val()
     .trim();
-  const unit = $("#unit")
+  let unit = $("#unit")
     .val()
     .trim();
-  const reps = $("#reps")
+  let reps = $("#reps")
     .val()
     .trim();
+
+  if (exerciseName === "") {
+    $("#exercise").val("Exercise name required");
+    return;
+  }
+  console.log("Unit & typeof");
+  console.log(unit);
+  console.log(typeof unit);
+
+  if (unit === "") {
+    unit = "1";
+  }
+  console.log(unit);
+  if (reps === "") {
+    reps = "1";
+  }
 
   // clear the input field from the html page.
   $("#exercise").val("");
@@ -72,6 +99,10 @@ function createExercise() {
   $("#reps").val("");
 
   // write new document to exercise collection
+  console.log("About to call api route to add new exercise:");
+  console.log("   exerciseName: " + exerciseName);
+  console.log("   Unit: " + unit);
+  console.log("   Reps: " + reps);
   $.ajax({
     method: "POST",
     url: `api/exercise/${exerciseName}/${unit}/${reps}`

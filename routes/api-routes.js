@@ -21,9 +21,26 @@ router.post("/workout/:workout", (req, res) => {
 // retrieves all exercises in the database (regardless of the workout)
 //   from the exercises collection
 router.get("/exercises", (req, res) => {
+  console.log("in GET api/exercises (get all)");
   db.Exercise.find({})
-    .then(dbExercise => {
-      res.json(dbExercise);
+    .then(dbExercises => {
+      res.json(dbExercises);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
+// retrieves all exercises in this workout (given array of exerice ids)
+//   from the exercises collection
+router.get("/exercises/:exerciseIds", (req, res) => {
+  console.log("In GET api/exercises/[exer ids]. exer ids:");
+  console.log(req.params.exerciseIds);
+  db.Exercise.find({ '_id' : { $in: req.params.exercises}})
+    .then(dbExercises => {
+      console.log("exercises found (dbExercises):");
+      console.log(dbExercises);
+      res.json(dbExercises);
     })
     .catch(err => {
       res.json(err);
@@ -134,6 +151,10 @@ router.get("/populated", (req, res) => {
 
 // Write new document to exercises when new exercise added
 router.post("/exercise/:name/:unit/:reps", (req, res) => {
+  console.log("In POST api/exercise/<name>/<unit>/<reps>");
+  console.log("     Name: " + req.params.name);
+  console.log("     Unit: " + req.params.unit);
+  console.log("     Reps: " + req.params.reps);
   const body = {
     description: req.params.name,
     unit: req.params.unit,

@@ -18,12 +18,24 @@ h2 {
     background-color: lightblue;
 }
 
-th {
-    width: 30%;
+td, th {
+    font-size: 18px;
 }
 
-.wideCol {
-    width: 40%;
+tr {
+    height: 40px;
+}
+
+.wider {
+    width: 65%;
+}
+
+.narrower {
+    width: 20%;
+}
+
+.narrowest {
+    width: 15%;
 }
 
 /* Space between choices, and nice indenting */
@@ -36,12 +48,18 @@ th {
     margin-top: 15px;
 }
 
+.addExerToWO {
+    height: 24px;
+    font-size: 12px;
+    background-color: lightblue;
+}
+
 /* Space before button, and highlight */
 #createNewExercise, #createNewWorkout {
     margin-left: 15px;
     background-color: rgb(252, 252, 137);
 }
 
-.execTableRow {
-    background-color: palegreen;
+.execTableRow, .execInWOTableRow {
+    background-color: rgb(252, 252, 137);
 }
