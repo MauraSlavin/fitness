@@ -33,9 +33,13 @@ router.get("/exercises", (req, res) => {
 
 // retrieves all exercises in this workout (given array of exerice ids)
 //   from the exercises collection
-router.get("/exercises/:exerciseIds", (req, res) => {
+// router.get("/exercises/:exerciseIds", (req, res) => {
+router.get("/exercises/inworkout", (req, res) => {
   console.log("In GET api/exercises/[exer ids]. exer ids:");
   console.log(req.params.exerciseIds);
+  console.log("exerciseIds");
+  console.log(exerciseIds);
+
   db.Exercise.find({ '_id' : { $in: req.params.exercises}})
     .then(dbExercises => {
       console.log("exercises found (dbExercises):");
@@ -62,27 +66,27 @@ router.get("/workouts/current", (req, res) => {
 // retrieves all the workout names from the workouts collection
 router.get("/workouts", (req, res) => {
   db.Workout.find({})
-    .then(dbWorkout => {
-      res.json(dbWorkout);
+    .then(dbWorkouts => {
+      res.json(dbWorkouts);
     })
     .catch(err => {
       res.json(err);
     });
 });
 
-// retrieves a workout and all its exercises given the
-//  _id of the workout
-router.get("/workout/:id", (req, res) => {
-  db.Workout.findOne({
-    _id: req.params.id
-  })
-    .then(dbWorkout => {
-      res.json(dbWorkout);
-    })
-    .catch(err => {
-      res.json(err);
-    });
-});
+// // retrieves a workout and all its exercises given the
+// //  _id of the workout
+// router.get("/workout/:id", (req, res) => {
+//   db.Workout.findOne({
+//     _id: req.params.id
+//   })
+//     .then(dbWorkout => {
+//       res.json(dbWorkout);
+//     })
+//     .catch(err => {
+//       res.json(err);
+//     });
+// });
 
 // makes the workout with the given id current
 router.put("/workout/:id", (req, res) => {
@@ -106,10 +110,10 @@ router.put("/workout/:id", (req, res) => {
 router.put("/workout/:workoutId/:exerciseId", (req, res) => {
   console.log("Workout ID: " + req.params.workoutId);
   console.log("Exercise ID: " + req.params.exerciseId);
-
+  
   db.Workout.findOneAndUpdate(
     { _id: req.params.workoutId },
-    { $push: { exercises: req.params.exerciseId } }
+    { $push: { "exercises": {"_id": req.params.exerciseId,  "whenDone": getTime() } }}
   )
     .then(result => {
       res.json(result);
@@ -137,11 +141,16 @@ router.put("/workouts/current", (req, res) => {
     });
 });
 
+// Get populated current workout
 // Populate is a mongoose term, to POPULATE with RELATED data
 router.get("/populated", (req, res) => {
-  db.Workout.find({})
-    .populate("exercises")  
+  console.log("in POPULATED in api-routes");
+  db.Workout.find({"current": true})
+    // .populate("exercises")  
+    .populate("exerciseIds")  
     .then(dbWorkout => {
+      console.log("dbWorkout:");
+      console.log(dbWorkout);
       res.json(dbWorkout);
     })
     .catch(err => {
@@ -168,6 +177,31 @@ router.post("/exercise/:name/:unit/:reps", (req, res) => {
       res.json(err);
     });
 });
+
+function getTime() {
+  let today = new Date();
+
+  let date =
+    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+
+  let hours = parseInt(today.getHours());
+
+  if (hours == 0) {
+    hours = 12;
+    ampm = "AM";
+  } else if (hours == 12) {
+    ampm = "PM";
+  } else if (hours > 12) {
+    hours = hours - 12;
+    ampm = "PM";
+  } else {
+    ampm = "AM";
+  };
+
+  time = hours + ":" + today.getMinutes();
+  return date + " " + time + " " + ampm;
+
+} // end of getTime function
 
 module.exports = router;
 

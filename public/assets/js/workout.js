@@ -2,65 +2,121 @@
 let currentWO = ""; // object of current workout
 
 function renderPage() {
-  // get name of current workout from workouts collection
-  $.get("api/populated", workouts => {
-    console.log("currentPopulated in workout.js; workouts:");
-    console.log(workouts);
-    if (workouts === null) {
+  // get name of CURRENT workout from workouts collection
+  $.get("api/populated", workout => {
+    console.log("currentPopulated in workout.js; workout:");
+    console.log(workout);
+    if (workout.length == 0) {
+      // This error message isn't on the console long enough to see,
+      //  but may be helpful for debugging!
       console.log(
         "ERROR:  There should be a current workout, and there isn't."
       );
+      // send back to the home page, since workout page assumes current workout
+      window.location.href = "index.html";
     } else {
       // set global currentWO to the object for the current workout
-      currentWO = workouts.find(workout => workout.current === true);
+      console.log(workout);
+      // workout should only have one element, and currentWO is an obj (not array)
+      currentWO = workout[0];
       console.log("the current workout is: (currentWO):");
       console.log(currentWO);
       console.log("Current workout name: " + currentWO.name);
       console.log("Current workout ID: " + currentWO._id);
+      console.log("Current exercises: ");
+      const currentExercises = currentWO.exercises;
+      console.log(currentExercises);
 
       // put the workout name in the sub-header on the html page
       $("#workoutName").text(currentWO.name);
-      //   console.log("workout:");
-      //   console.log(workout);
-      // display exercises in workout
-      // exerciseIds is an array of the _id of each exercise in the workout
-      $(".execInWOTableRow").remove();
-      let tableElt = "";
-      currentWO.exercises.forEach(exercise => {
-        // put each exercise on the html page
-        console.log("An exercise in the workout:");
-        console.log(exercise);
 
-        tableElt = `<tr class="execInWOTableRow">`;
-        tableElt += `<td>${exercise.description}</td>`;
-        tableElt += `<td>${exercise.unit}</td>`;
-        tableElt += `<td>${exercise.reps}</td>`;
-        tableElt += "</tr>";
-        $(".addExercisesInWO").append(tableElt);
-      });
+      // get exercise ids for all exercises in the workout
+      // exerIndicesInWO is an array of the _id of each exercise in the workout
+      let exerIndicesInWO = currentExercises.map(exer => exer._id);
+
+      // clear out list of exercises in workout, and all exercises
+      //  so we know we're building the lists from scratch
+      $(".execInWOTableRow").remove(); // exercises in workout
+      $(".execTableRow").remove(); // all available exercises
+
+      console.log("exerIndicesInWO:  ");
+      console.log(exerIndicesInWO);
+      // get all exercises from db
+      $.get("api/exercises", exercises => {
+        let allExecRow = ""; // row element in section for all exercises available
+        let execInWORow = ""; // row element in section for exercises in this workout only
+        exercises.forEach(exercise => {
+          // add exercise to section of ALL exercises available
+          allExecRow = `<tr class="execTableRow">`;
+          allExecRow += `<td>${exercise.description}</td>`;
+          allExecRow += `<td>${exercise.unit}</td>`;
+          allExecRow += `<td>${exercise.reps}</td>`;
+          allExecRow += '<td><button class="btn btn-default addExerToWO" '; // start button tag
+          allExecRow += `data-id="${exercise._id}" `; // add exercise id
+          allExecRow += 'type="submit">Add to workout</button></td>'; // finish button tag
+          allExecRow += "</tr>";
+          $(".allExercises").append(allExecRow);
+
+          // if this exercise is in the current workout, display it in that list, too,
+          //   with the time/date done.
+          console.log("First exercise in all exercises list.  It is: ");
+          console.log(exercise);
+          console.log("_id:" + exercise._id);
+
+          let index;
+          // find how many times this exercise was done in this workout,
+          //   and where in workouts.exercises the timestamps can be found
+          // let thisExerIndicies = exerIndicesInWO.indexOf(exercise._id);
+
+          let thisExerIndicies = exerIndicesInWO.reduce(function(array, elt, index) {
+            if (elt === exercise._id) array.push(index);
+            return array;
+          }, []);
+          // ["Nano","Volvo","BMW","Nano","VW","Nano"].reduce(function(a, e, i) {
+          //     if (e === 'Nano')
+          //         a.push(i);
+          //     return a;
+          // }, []);
+
+          console.log("indexes into WO.exercises for dup exercises done:");
+          console.log(thisExerIndicies);
+          console.log("Begin loop through these indexes (above)");
+          for (let i = 0; i < thisExerIndicies.length; i++) {
+            console.log("In i loop...  i: " + i);
+            // i-th time this exercise was done in this workout,
+            //  index gets timestamp from WO.exercises
+            index = thisExerIndicies[i];
+            console.log("index: " + index);
+            // then display exercise & date/time in top section
+            //  (exercises in the current workout), too
+
+            // put each exercise on the html page
+            console.log("Id for an exercise in the workout:");
+            console.log(exerIndicesInWO[index]);
+            console.log("exercise:");
+            console.log(exercise);
+            // find whenDone
+            const whenDone = currentExercises[index].whenDone;
+
+            console.log("whenDone: " + whenDone);
+            // console.log(exercise.whenDone);
+            // let whenDone = exercise.whenDone.toString();
+
+            execInWORow = `<tr class="execInWOTableRow">`;
+            execInWORow += `<td>${exercise.description}</td>`;
+            execInWORow += `<td>${exercise.unit}</td>`;
+            execInWORow += `<td>${exercise.reps}</td>`;
+            execInWORow += `<td>${whenDone}</td>`;
+            execInWORow += `<td>`;
+            execInWORow += "</tr>";
+            $(".addExercisesInWO").append(execInWORow);
+          } // end of for each of this exercise in workout
+          //     could be more than one of same thing
+        }); // end of for each index
+      }).catch(error => {
+        console.log(error);
+      }); // end of GET api/exercises
     } // end of else - there is a current workout
-
-    // display all exercises
-    $.get("api/exercises", exercises => {
-      //   console.log("In workout.js; renderPage; GET api/exercises; exercises:");
-      //   console.log(exercises);
-      // clear out rows so exercises aren't duplicated
-      $(".execTableRow").remove();
-      let tableElt = "";
-      exercises.forEach(exercise => {
-        tableElt = `<tr class="execTableRow">`;
-        tableElt += `<td>${exercise.description}</td>`;
-        tableElt += `<td>${exercise.unit}</td>`;
-        tableElt += `<td>${exercise.reps}</td>`;
-        tableElt += '<td><button class="btn btn-default addExerToWO" '; // start button tag
-        tableElt += `data-id="${exercise._id}" `; // add exercise id
-        tableElt += 'type="submit">Add to workout</button></td>'; // finish button tag
-        tableElt += "</tr>";
-        $(".allExercises").append(tableElt);
-      });
-    }).catch(error => {
-      console.log(error);
-    }); // end of GET api/exercises
   }); // end of GET api/populated
 } // end of renderPage function
 

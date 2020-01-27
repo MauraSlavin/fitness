@@ -2,6 +2,16 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
+const exerciseSchema = new Schema({
+  exerciseId: {
+    type: Schema.Types.ObjectId,
+    ref: "Exercise"
+  },
+  whenDone: {
+    type: String
+  }
+});
+
 const WorkoutSchema = new Schema({
   name: {
     type: String,
@@ -11,12 +21,7 @@ const WorkoutSchema = new Schema({
   current: {
     type: Boolean
   },
-  exercises: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Exercise"
-    }
-  ]
+  exercises: [exerciseSchema]
 });
 
 const Workout = mongoose.model("Workout", WorkoutSchema);
