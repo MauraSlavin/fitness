@@ -3,6 +3,8 @@ const router = require("express").Router();
 // get internal database models
 const db = require("../models");
 
+// write a new document to the workout collection
+//   when a new workout is created.
 router.post("/workout/:workout", (req, res) => {
   const body = {
     name: req.params.workout,
@@ -30,19 +32,19 @@ router.get("/exercises", (req, res) => {
     });
 });
 
-// retrieves all exercises in this workout (given array of exerice ids)
-//   from the exercises collection
-// router.get("/exercises/:exerciseIds", (req, res) => {
-router.get("/exercises/inworkout", (req, res) => {
+// // retrieves all exercises in this workout (given array of exerice ids)
+// //   from the exercises collection
+// // router.get("/exercises/:exerciseIds", (req, res) => {
+// router.get("/exercises/inworkout", (req, res) => {
 
-  db.Exercise.find({ '_id' : { $in: req.params.exercises}})
-    .then(dbExercises => {
-      res.json(dbExercises);
-    })
-    .catch(err => {
-      res.json(err);
-    });
-});
+//   db.Exercise.find({ '_id' : { $in: req.params.exercises}})
+//     .then(dbExercises => {
+//       res.json(dbExercises);
+//     })
+//     .catch(err => {
+//       res.json(err);
+//     });
+// });
 
 // retrieves the current workout from the currents collection
 // should only be one.  Uses the first, if more than one retrieved
@@ -133,7 +135,7 @@ router.put("/workouts/current", (req, res) => {
 
 // Get populated current workout
 // Populate is a mongoose term, to POPULATE with RELATED data
-router.get("/populated", (req, res) => {
+router.get("/workout/populated", (req, res) => {
 
   db.Workout.find({"current": true})
     // .populate("exercises")  
@@ -162,14 +164,19 @@ router.post("/exercise/:name/:unit/:reps", (req, res) => {
     });
 });
 
+// get current date and time
+// in local timezone
+// in readable format
 function getTime() {
+  // get date & time (in browser's time zone)
   let today = new Date();
 
+  // date in xx/xx/xxxx format
   let date =
-    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+    (today.getMonth() + 1) + "/"  + today.getDate() + "/" + today.getFullYear();
 
+  // convert 24 hour time to 12 am/pm format
   let hours = parseInt(today.getHours());
-
   if (hours == 0) {
     hours = 12;
     ampm = "AM";
@@ -182,23 +189,11 @@ function getTime() {
     ampm = "AM";
   };
 
-  time = hours + ":" + today.getMinutes();
-  return date + " " + time + " " + ampm;
+  // assign time in xx:xx AM (or PM) format
+  time = hours + ":" + today.getMinutes() + " " + ampm;
+  // put it all together and return
+  return date + " " + time;
 
 } // end of getTime function
 
 module.exports = router;
-
-  // const body = {
-  //   name: req.params.workout,
-  //   current: true
-  // };
-
-  // db.Workout.create(body)
-  //   .then(dbExercise => {
-  //     res.json(dbExercise);
-  //   })
-  //   .catch(err => {
-  //     res.json(err);
-  //   });
-

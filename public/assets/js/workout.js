@@ -3,7 +3,7 @@ let currentWO = ""; // object of current workout
 
 function renderPage() {
   // get name of CURRENT workout from workouts collection
-  $.get("api/populated", workout => {
+  $.get("api/workout/populated", workout => {
     if (workout.length == 0) {
       handleNoCurrentWO();
     } else {
@@ -107,7 +107,8 @@ function appendWOExercises({ exercise, exerIndicesInWO, currentExercises }) {
     execInWORow += `<td>${whenDone}</td>`;
     execInWORow += `<td>`;
     execInWORow += "</tr>";
-    $(".addExercisesInWO").append(execInWORow);
+    // prepend so latest is on top
+    $(".addExercisesInWO").prepend(execInWORow);
   } // end of for each of this exercise in workout
   //     could be more than one of same thing
 } // end of appendWOExercises function

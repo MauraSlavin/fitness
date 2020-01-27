@@ -18,11 +18,15 @@ h2 {
     background-color: lightblue;
 }
 
+/* Place and size home button */
 .home {
     text-align: left;
     font-size: 20px;
 }
 
+/* tweak formatting of tables */
+/* td, th, tr, .execTableRow, .execInWOTableRow */
+/* .desc1 & 2, .unit1 & 2, .reps1 & 2, .time1 are column widths */
 td, th {
     font-size: 18px;
 }
@@ -31,15 +35,23 @@ tr {
     height: 40px;
 }
 
-.wider {
-    width: 65%;
+.execTableRow, .execInWOTableRow {
+    background-color: rgb(252, 252, 137);
 }
 
-.narrower {
+.desc2, .time1 {
+    width: 60%;
+}
+
+.desc1 {
+    width: 25%;
+}
+
+.unit1, .unit2 {
     width: 20%;
 }
 
-.narrowest {
+.reps1, .reps2 {
     width: 15%;
 }
 
@@ -53,18 +65,15 @@ tr {
     margin-top: 15px;
 }
 
+/* style button to add exercise to workout */
 .addExerToWO {
     height: 24px;
     font-size: 12px;
     background-color: lightblue;
 }
 
-/* Space before button, and highlight */
+/* Space before button to add new exercise, and highlight */
 #createNewExercise, #createNewWorkout {
     margin-left: 15px;
-    background-color: rgb(252, 252, 137);
-}
-
-.execTableRow, .execInWOTableRow {
     background-color: rgb(252, 252, 137);
 }
