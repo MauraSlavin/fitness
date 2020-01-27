@@ -1,20 +1,18 @@
 // put current workout name and list of workouts on home page
 function renderHomePage() {
-
   // get name of current workout from workouts collection
   $.get("api/workouts/current", workout => {
-
     // href is enabled if there is a current workout.
     let hrefEnabled =
       '<a href="workout.html" class="btn btn-default goToCurrent"></a>';
     // the element will be a disabled button if there is no current workout.
     let btnDisabled =
       '<button class="btn btn-default goToCurrent" disabled>No current workout.</button>';
-    
+
     // if there is a current workout, put the name on the html page
     //   and enable the button (href) to go to the workout page with that workout
     // otherwise, it's a disabled button
-    
+
     // Don't need the goToCurrent class unless there is a current workout
     $(".goToCurrent").remove();
     if (workout !== null) {
@@ -29,21 +27,25 @@ function renderHomePage() {
 
   // Load all the workout names on the page
   $.get("api/workouts", workouts => {
-    let beginButton = '<br><button class="btn btn-default btnSpace" data-id=';
-    let workoutButton = "";
-
-    workouts.forEach(workout => {
-      // do NOT include this workout if it is the current one
-      if (typeof workout.current === "undefined" || !workout.current) {
-        workoutButton = beginButton; // they all start the same
-        workoutButton += `"${workout._id}" `; // add data-id with the _id of the workout
-        workoutButton += `type="button">${workout.name}</button>`; // finish button elt, incl name of workout on button
-        //   workoutButton += '<br>'; // next button on a new line
-        $(".addWorkoutList").append(workoutButton); // add the button to the html
-      } // end of if NOT the current workout
-    }); // end of workouts.forEach
+    loadWorkoutNames(workouts);
   }); // end of get api/workouts
 } // end of renderHomePage function
+
+function loadWorkoutNames(workouts) {
+  let beginButton = '<br><button class="btn btn-default btnSpace" data-id=';
+  let workoutButton = "";
+
+  workouts.forEach(workout => {
+    // do NOT include this workout if it is the current one
+    if (typeof workout.current === "undefined" || !workout.current) {
+      workoutButton = beginButton; // they all start the same
+      workoutButton += `"${workout._id}" `; // add data-id with the _id of the workout
+      workoutButton += `type="button">${workout.name}</button>`; // finish button elt, incl name of workout on button
+      //   workoutButton += '<br>'; // next button on a new line
+      $(".addWorkoutList").append(workoutButton); // add the button to the html
+    } // end of if NOT the current workout
+  }); // end of workouts.forEach
+} // end of loadWorkoutNames function
 
 function createWorkout() {
   // get workout name from html
@@ -53,7 +55,7 @@ function createWorkout() {
     .trim();
   // clear the input field from the html page.
   $("#workout").val("");
-  
+
   // take current property off any document (row) that it's now on
   $.ajax({
     method: "PUT",
@@ -78,7 +80,6 @@ function createWorkout() {
 } // end of function createWorkout
 
 function goToOldWorkout(id) {
-
   // Make workout chosen the current workout
   // first remove old current workout,
   //    then make this the current workout
@@ -89,14 +90,12 @@ function goToOldWorkout(id) {
     method: "PUT",
     url: `/api/workouts/current`
   }).then(result => {
-
     // update document to make this workout the current one
     $.ajax({
       method: "PUT",
       url: `api/workout/${id}`
     })
       .then(result => {
-
         // send user to workout html page
         window.location.href = "workout.html";
       })

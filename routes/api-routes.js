@@ -21,7 +21,6 @@ router.post("/workout/:workout", (req, res) => {
 // retrieves all exercises in the database (regardless of the workout)
 //   from the exercises collection
 router.get("/exercises", (req, res) => {
-  console.log("in GET api/exercises (get all)");
   db.Exercise.find({})
     .then(dbExercises => {
       res.json(dbExercises);
@@ -35,15 +34,9 @@ router.get("/exercises", (req, res) => {
 //   from the exercises collection
 // router.get("/exercises/:exerciseIds", (req, res) => {
 router.get("/exercises/inworkout", (req, res) => {
-  console.log("In GET api/exercises/[exer ids]. exer ids:");
-  console.log(req.params.exerciseIds);
-  console.log("exerciseIds");
-  console.log(exerciseIds);
 
   db.Exercise.find({ '_id' : { $in: req.params.exercises}})
     .then(dbExercises => {
-      console.log("exercises found (dbExercises):");
-      console.log(dbExercises);
       res.json(dbExercises);
     })
     .catch(err => {
@@ -90,7 +83,6 @@ router.get("/workouts", (req, res) => {
 
 // makes the workout with the given id current
 router.put("/workout/:id", (req, res) => {
-  console.log("Set this workout to the current workout.  ID: " + req.params.id);
 
   db.Workout.updateOne(
     {
@@ -108,8 +100,6 @@ router.put("/workout/:id", (req, res) => {
 
 // puts the exercise in the workout
 router.put("/workout/:workoutId/:exerciseId", (req, res) => {
-  console.log("Workout ID: " + req.params.workoutId);
-  console.log("Exercise ID: " + req.params.exerciseId);
   
   db.Workout.findOneAndUpdate(
     { _id: req.params.workoutId },
@@ -144,13 +134,11 @@ router.put("/workouts/current", (req, res) => {
 // Get populated current workout
 // Populate is a mongoose term, to POPULATE with RELATED data
 router.get("/populated", (req, res) => {
-  console.log("in POPULATED in api-routes");
+
   db.Workout.find({"current": true})
     // .populate("exercises")  
     .populate("exerciseIds")  
     .then(dbWorkout => {
-      console.log("dbWorkout:");
-      console.log(dbWorkout);
       res.json(dbWorkout);
     })
     .catch(err => {
@@ -160,10 +148,6 @@ router.get("/populated", (req, res) => {
 
 // Write new document to exercises when new exercise added
 router.post("/exercise/:name/:unit/:reps", (req, res) => {
-  console.log("In POST api/exercise/<name>/<unit>/<reps>");
-  console.log("     Name: " + req.params.name);
-  console.log("     Unit: " + req.params.unit);
-  console.log("     Reps: " + req.params.reps);
   const body = {
     description: req.params.name,
     unit: req.params.unit,
