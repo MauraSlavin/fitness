@@ -32,20 +32,6 @@ router.get("/exercises", (req, res) => {
     });
 });
 
-// // retrieves all exercises in this workout (given array of exerice ids)
-// //   from the exercises collection
-// // router.get("/exercises/:exerciseIds", (req, res) => {
-// router.get("/exercises/inworkout", (req, res) => {
-
-//   db.Exercise.find({ '_id' : { $in: req.params.exercises}})
-//     .then(dbExercises => {
-//       res.json(dbExercises);
-//     })
-//     .catch(err => {
-//       res.json(err);
-//     });
-// });
-
 // retrieves the current workout from the currents collection
 // should only be one.  Uses the first, if more than one retrieved
 router.get("/workouts/current", (req, res) => {
@@ -68,20 +54,6 @@ router.get("/workouts", (req, res) => {
       res.json(err);
     });
 });
-
-// // retrieves a workout and all its exercises given the
-// //  _id of the workout
-// router.get("/workout/:id", (req, res) => {
-//   db.Workout.findOne({
-//     _id: req.params.id
-//   })
-//     .then(dbWorkout => {
-//       res.json(dbWorkout);
-//     })
-//     .catch(err => {
-//       res.json(err);
-//     });
-// });
 
 // makes the workout with the given id current
 router.put("/workout/:id", (req, res) => {

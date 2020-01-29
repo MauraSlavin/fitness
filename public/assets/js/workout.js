@@ -29,7 +29,7 @@ function handleNoCurrentWO() {
   //  but may be helpful for debugging!
   console.log("ERROR:  There should be a current workout, and there isn't.");
   // send back to the home page, since workout page assumes current workout
-  window.location.href = "index.html";
+  window.location.href = "./index.html";
 } // end of handleNoCurrentWO function
 
 function putExercisesOnHtml({ currentExercises, exerIndicesInWO }) {

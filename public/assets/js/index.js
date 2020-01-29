@@ -4,7 +4,7 @@ function renderHomePage() {
   $.get("api/workouts/current", workout => {
     // href is enabled if there is a current workout.
     let hrefEnabled =
-      '<a href="workout.html" class="btn btn-default goToCurrent"></a>';
+      '<a href="./workout.html" class="btn btn-default goToCurrent"></a>';
     // the element will be a disabled button if there is no current workout.
     let btnDisabled =
       '<button class="btn btn-default goToCurrent" disabled>No current workout.</button>';
@@ -72,7 +72,7 @@ function createWorkout() {
   })
     .then(result => {
       // send user to workout html page
-      window.location.href = "workout.html";
+      window.location.href = "./workout.html";
     })
     .catch(error => {
       console.log(error);
@@ -97,7 +97,7 @@ function goToOldWorkout(id) {
     })
       .then(result => {
         // send user to workout html page
-        window.location.href = "workout.html";
+        window.location.href = "./workout.html";
       })
       .catch(error => {
         console.log(error);
