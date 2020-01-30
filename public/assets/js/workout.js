@@ -72,22 +72,15 @@ function appendExercises(exercise) {
 } // end of appendExercises function
 
 function appendWOExercises({ exercise, exerIndicesInWO, currentExercises }) {
-  let index;
   // find how many times this exercise was done in this workout,
   //   and where in workouts.exercises the timestamps can be found
-  // let thisExerIndicies = exerIndicesInWO.indexOf(exercise._id);
-
   let thisExerIndicies = exerIndicesInWO.reduce(function(array, elt, index) {
     if (elt === exercise._id) array.push(index);
     return array;
   }, []);
-  // ["Nano","Volvo","BMW","Nano","VW","Nano"].reduce(function(a, e, i) {
-  //     if (e === 'Nano')
-  //         a.push(i);
-  //     return a;
-  // }, []);
 
   for (let i = 0; i < thisExerIndicies.length; i++) {
+    let index;
     // i-th time this exercise was done in this workout,
     //  index gets timestamp from WO.exercises
     index = thisExerIndicies[i];

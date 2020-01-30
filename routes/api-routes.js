@@ -142,27 +142,41 @@ router.post("/exercise/:name/:unit/:reps", (req, res) => {
 function getTime() {
   // get date & time (in browser's time zone)
   let today = new Date();
+  // get parts of the date and time we need
+  let year = today.getFullYear();
+  let month = today.getMonth() + 1; // returns 0 - 11; need 1 - 12
+  let date = today.getDate();
+  let hour = today.getHours();
+  let minutes = today.getMinutes();
+
+  // change into strings
+  year = year.toString();
+  month = month.toString();
+  date = date.toString();  // just the 1-31 part
+
+    // put in two character string format with leading 0, if needed.
+  minutes = String(minutes).padStart(2, '0')
 
   // date in xx/xx/xxxx format
-  let date =
-    (today.getMonth() + 1) + "/"  + today.getDate() + "/" + today.getFullYear();
+  date = month + "/"  + date + "/" + year;
 
   // convert 24 hour time to 12 am/pm format
-  let hours = parseInt(today.getHours());
-  if (hours == 0) {
-    hours = 12;
+  if (hour == 0) {
+    hour = 12;
     ampm = "AM";
-  } else if (hours == 12) {
+  } else if (hour == 12) {
     ampm = "PM";
-  } else if (hours > 12) {
-    hours = hours - 12;
+  } else if (hour > 12) {
+    hour = hour - 12;
     ampm = "PM";
   } else {
     ampm = "AM";
   };
+  // then change hour to a string, too
+  hour = hour.toString();
 
   // assign time in xx:xx AM (or PM) format
-  time = hours + ":" + today.getMinutes() + " " + ampm;
+  time = hour + ":" + minutes + " " + ampm;
   // put it all together and return
   return date + " " + time;
 
