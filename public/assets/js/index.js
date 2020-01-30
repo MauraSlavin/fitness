@@ -49,7 +49,6 @@ function loadWorkoutNames(workouts) {
 
 function createWorkout() {
   // get workout name from html
-
   const workoutName = $("#workout")
     .val()
     .trim();
@@ -60,22 +59,29 @@ function createWorkout() {
   $.ajax({
     method: "PUT",
     url: `/api/workouts/current`
-  }).then(result => {
-    console.log(result);
-  });
-
-  // write new document to collection for new workout
-  //  current will be set to true
-  $.ajax({
-    method: "POST",
-    url: `api/workout/${workoutName}`
   })
     .then(result => {
-      // send user to workout html page
-      window.location.href = "./workout.html";
+      console.log(result);
     })
-    .catch(error => {
-      console.log(error);
+    .then(result => {
+      $.ajax({
+        // write new document to collection w/"current" set to true
+        method: "POST",
+        url: `api/workout/${workoutName}`
+      })
+        .then(result => {
+          // In case the page is cached (and not re-loaded) when user returns...
+          //    reload it, so it will have the new current page in the first section,
+          //    and the correct list of other workouts in the bottom section.
+          renderHomePage();
+        })
+        .then(result => {
+          // send user to workout html page
+          window.location.href = "./workout.html";
+        })
+        .catch(error => {
+          console.log(error);
+        });
     });
 } // end of function createWorkout
 
