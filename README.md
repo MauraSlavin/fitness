@@ -3,6 +3,8 @@ Fitness tracker using mongoDB and Mongoose
 
 [Link to Github repository.](https://github.com/MauraSlavin/fitness "Github repository")
 
+[Link to deployed app.](https://gentle-sierra-23761.herokuapp.com/workout.html "Deployed app")
+
 
 ## User story
 Someone is more likely to follow good exercise habits if they can see their progress.
@@ -29,7 +31,7 @@ The user can easily navigate to any of these workouts by clicking on it.  A new 
 ## Workout page
 The workout page shows the details for a given workout in three sections:
 
-    1. The top section shows the exercises entered (done) with some details and a time stamp.  This is informational.
+    1. The top section shows the exercises entered (done) with some details and a time stamp (the time zone is set to New York in Heroku).  This is informational.
     2. The middle section shows exercises available that have been entered into the app.  Users click on "Add to workout" when the exercise is completed to add it to the workout.  The exerccise is defined by a description, unit (such as weight, miles, minutes, etc.), and reps.
     3. The bottom section allows the user to enter a new workout, which will be available to add to any workout.  The user enters the description, unit and reps, and clicks "Add New Exercise."  This adds it to the list of available exercises, and can then be added to the workout.
    
