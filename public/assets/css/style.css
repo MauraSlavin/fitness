@@ -2,9 +2,20 @@ body {
     background-color: rgb(117, 252, 146);
 }
 
+.main {
+    display: flex;
+    padding: 15px;
+}
+
+/* place img on right to the edge of container */
+.bigCol {
+    width: 100%;
+}
+
 /* Font size for paragraphs */
 p {
     font-size: 22px;
+    display: inline-flex;
 }
 
 h1 {
@@ -16,6 +27,11 @@ h1 {
 h2 {
     text-align: center;
     background-color: lightblue;
+}
+
+/* list of old workouts on separate lines */
+.addWorkoutList {
+    display: block;
 }
 
 /* Place and size home button */
@@ -60,9 +76,19 @@ tr {
     margin: 40px;
 }
 
-/* Space between buttons */
+/* Space between text and button */
+#btnHref {
+    margin-left: 15px;
+}
+
+/* Space between buttons, and indent */
 .btnSpace {
     margin-top: 15px;
+}
+
+/* indent buttons */
+.btnSpace, .input-group {
+    margin-left: 30px;
 }
 
 /* style button to add exercise to workout */
