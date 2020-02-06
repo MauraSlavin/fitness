@@ -1,23 +1,13 @@
 {
   "name": "Fitness Tracker",
-  "short_name": "Fitness Tracker",
+  "short_name": "Fitness",
   "icons": [
     {
-      "src": "assets/images/strongwoman.png",
-      "sizes": "75x100",
-      "type": "image/png"
-    },
-    {
-      "src": "assets/images/strongman.png",
-      "sizes": "122x100",
+      "src": "assets/images/strongwoman144.png",
+      "sizes": "144x144",
       "type": "image/png"
     }
-    
-    // {
-    //   "src": "assets/images/icons/icon-512x512.png",
-    //   "sizes": "512x512",
-    //   "type": "image/png"
-    // }
+
   ],
   "theme_color": "#ffffff",
   "background_color": "#ffffff",

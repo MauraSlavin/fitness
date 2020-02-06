@@ -66,7 +66,7 @@ function appendExercises(exercise) {
   allExecRow += `<td>${exercise.reps}</td>`;
   allExecRow += '<td><button class="btn btn-default addExerToWO" '; // start button tag
   allExecRow += `data-id="${exercise._id}" `; // add exercise id
-  allExecRow += 'type="submit">Add to workout</button></td>'; // finish button tag
+  allExecRow += 'type="submit">Add</button></td>'; // finish button tag
   allExecRow += "</tr>";
   $(".allExercises").append(allExecRow);
 } // end of appendExercises function
@@ -108,7 +108,7 @@ function appendWOExercises({ exercise, exerIndicesInWO, currentExercises }) {
 
 function createExercise() {
   // get exercise information from html
-
+  console.log("In 'createExercise' -- button clicked.");
   let exerciseName = $("#exercise")
     .val()
     .trim();
@@ -180,6 +180,9 @@ $(document).ready(() => {
     addExerciseToWorkout(exerciseId);
   }); // of allExercises on click, addExerToWO
 
-  // listen for (and handle) when Go! button is clicked to create a new workout
-  $("#createNewExercise").on("click", () => createExercise());
+  // listen for (and handle) when button is clicked to create a new exercise
+  $(".createNewExercise").on("click", () => {
+    console.log("About to call 'createExercise' -- button clicked.");
+    createExercise();
+  });
 });

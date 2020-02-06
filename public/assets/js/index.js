@@ -17,11 +17,11 @@ function renderHomePage() {
     $(".goToCurrent").remove();
     if (workout !== null) {
       // if there is a workout, use the enabled href & goToCurrent class
-      $("#btnHref").append(hrefEnabled);
+      $(".btnHref").append(hrefEnabled);
       $(".goToCurrent").html(workout.name);
     } else {
       // if no current workout, disable the button
-      $("#btnHref").append(btnDisabled);
+      $(".btnHref").append(btnDisabled);
     }
   });
 
@@ -118,7 +118,7 @@ $(document).ready(() => {
   // Clicking on current workout is handled in the html.
 
   // listen for (and handle) when Go! button is clicked to create a new workout
-  $("#createNewWorkout").on("click", () => createWorkout());
+  $(".createNewWorkout").on("click", () => createWorkout());
 
   // listen for (& handle) when another workout is clicked on
   $(".addWorkoutList").on("click", ".btnSpace", function(event) {
