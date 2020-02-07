@@ -52,9 +52,9 @@ function loadWorkoutNames(workouts) {
 // Takes disable message off, and enables buttons when back online.
 function updateStatus() {
   console.log("Status:");
-  console.log(navigator.online);
-  alert(navigator.online);
-  if (navigator.online) {
+  console.log(navigator.onLine);
+  alert(navigator.onLine);
+  if (navigator.onLine) {
     alert("Your connection is back.");
   } else {
     alert("Offline...");
