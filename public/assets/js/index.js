@@ -51,13 +51,35 @@ function loadWorkoutNames(workouts) {
 // Puts message on window if offline, and disables buttons that won't work.
 // Takes disable message off, and enables buttons when back online.
 function updateStatus() {
-  console.log("Status:");
-  console.log(navigator.onLine);
+
   alert(navigator.onLine);
   if (navigator.onLine) {
-    alert("Your connection is back.");
+    // remove offline message, if it was there.
+    $('.offline').remove();
+
+    // create and remove returning online message.
+    const offlineMsg = '<p class="online">You are now back online.  App is fully functional.  Thank you!</p>';
+    $("h3").append(offlineMsg);
+
+    // disable button to add a workout ("Go!" button)
+    $('.createNewWorkout').attr('disabled', false);
+
+    // diable buttons that go to different workouts
+    $('.btnSpace').attr('disabled', false);
   } else {
-    alert("Offline...");
+    // remove online message, if it was there.
+    $('.online').remove();
+
+    // Put offline message on window.
+    const offlineMsg = '<p class="offline">You are now offline.  You can see the list of workouts, and the current workout, but you cannot add or change workouts or exercises.  Thank you for your patience.</p>';
+    $("h3").append(offlineMsg);
+
+    // disable button to add a workout ("Go!" button)
+    $('.createNewWorkout').attr('disabled', true);
+
+    // diable buttons that go to different workouts
+    $('.btnSpace').attr('disabled', true);
+
   };
 
 } // of updateStatus function
