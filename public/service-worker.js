@@ -3,7 +3,7 @@ const FILES_TO_CACHE = [
   "/workout",
   "/workouts",
   "/workouts/current",
-  "/workout/populated"
+  "/workout/populated",
   "/exercises",
   "/index.html",
   "/workout.html",
