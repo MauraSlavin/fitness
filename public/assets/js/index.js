@@ -47,6 +47,19 @@ function loadWorkoutNames(workouts) {
   }); // end of workouts.forEach
 } // end of loadWorkoutNames function
 
+
+// Puts message on window if offline, and disables buttons that won't work.
+// Takes disable message off, and enables buttons when back online.
+function updateStatus() {
+  if (navigator.online) {
+    alert("Your connection is back.");
+  } else {
+    alert("Offline...");
+  };
+
+} // of updateStatus function
+
+
 function createWorkout() {
   // get workout name from html
   const workoutName = $("#workout")
@@ -114,6 +127,10 @@ function goToOldWorkout(id) {
 // Wait until page is loaded
 $(document).ready(() => {
   renderHomePage();
+  
+  // Put notice on website and enable/disable buttons when online status changes
+  window.addEventListener('online', updateStatus);
+  window.addEventListener('offline', updateStatus);
 
   // Clicking on current workout is handled in the html.
 
