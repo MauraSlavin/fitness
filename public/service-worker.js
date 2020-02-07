@@ -30,7 +30,7 @@ const FILES_TO_CACHE = [
   "/assets/js/index.js",
   "/assets/js/workout.js",
   "/assets/images/strongman.png",
-  "/assets/images/strongwoman.png",
+  "/assets/images/stronglady.png",
   "/assets/images/strongwoman144.png"
 ];
 
