@@ -1,5 +1,10 @@
 const FILES_TO_CACHE = [
   "/",
+  "/workout",
+  "/workouts",
+  "/workouts/current",
+  "/workout/populated"
+  "/exercises",
   "/index.html",
   "/workout.html",
   "/manifest.webmanifest",
