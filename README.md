@@ -5,6 +5,9 @@ Fitness tracker using mongoDB and Mongoose
 
 [Link to deployed app.](https://gentle-sierra-23761.herokuapp.com/workout.html "Deployed app")
 
+The Fitness Tracker is PWA that has some functionality when offline, and displays a message explaining to the user what will and won't work until an Internet connection is re-established.
+
+Code and images have been compressed an minified for efficiency.
 
 ## User story
 Someone is more likely to follow good exercise habits if they can see their progress.
