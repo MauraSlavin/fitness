@@ -1,9 +1,12 @@
 // Global variable for this page
 let currentWO = ""; // object of current workout
 
+// addExerToWO
+
 function renderPage() {
   // get name of CURRENT workout from workouts collection
   $.get("api/workout/populated", workout => {
+    console.log("1. In renderPage (workout.js)");
     if (workout.length == 0) {
       handleNoCurrentWO();
     } else {
@@ -14,12 +17,17 @@ function renderPage() {
 
       // put the workout name in the sub-header on the html page
       $("#workoutName").text(currentWO.name);
+      console.log("2. Workout name written to subheader");
 
       // get exercise ids for all exercises in the workout
       // exerIndicesInWO is an array of the _id of each exercise in the workout
       let exerIndicesInWO = currentExercises.map(exer => exer._id);
 
       putExercisesOnHtml({ currentExercises, exerIndicesInWO });
+
+      // If offline, display message and disable buttons
+      updateStatus();
+      
     } // end of else - there is a current workout
   }); // end of GET api/populated
 } // end of renderPage function
@@ -37,6 +45,8 @@ function putExercisesOnHtml({ currentExercises, exerIndicesInWO }) {
   //  so we know we're building the lists from scratch
   $(".execInWOTableRow").remove(); // exercises in workout
   $(".execTableRow").remove(); // all available exercises
+  console.log("3. In putExercisesOnHtml, old exercises have been cleared out.");
+
 
   // get all exercises from db
   $.get("api/exercises", exercises => {
@@ -64,8 +74,11 @@ function appendExercises(exercise) {
   allExecRow += `<td>${exercise.description}</td>`;
   allExecRow += `<td>${exercise.unit}</td>`;
   allExecRow += `<td>${exercise.reps}</td>`;
-  allExecRow += '<td><button class="btn btn-default addExerToWO" '; // start button tag
+  allExecRow += '<td><button class="btn btn-warning addExerToWO" '; // start button tag
   allExecRow += `data-id="${exercise._id}" `; // add exercise id
+  if (!navigator.onLine) {
+  allExecRow += 'disabled="disabled" '; // disable the button if offline
+  };
   allExecRow += 'type="submit">Add</button></td>'; // finish button tag
   allExecRow += "</tr>";
   $(".allExercises").append(allExecRow);
@@ -98,13 +111,46 @@ function appendWOExercises({ exercise, exerIndicesInWO, currentExercises }) {
     execInWORow += `<td>${exercise.unit}</td>`;
     execInWORow += `<td>${exercise.reps}</td>`;
     execInWORow += `<td>${whenDone}</td>`;
-    execInWORow += `<td>`;
+    // execInWORow += `<td>`;
     execInWORow += "</tr>";
     // prepend so latest is on top
     $(".addExercisesInWO").prepend(execInWORow);
   } // end of for each of this exercise in workout
   //     could be more than one of same thing
 } // end of appendWOExercises function
+
+// Puts message on window if offline, and disables buttons that won't work.
+// Takes disable message off, and enables buttons when back online.
+function updateStatus() {
+
+  if (navigator.onLine) {
+    // Online handling...
+    
+    // remove offline message, if it was there.
+    $('.offline').remove();
+
+    // enable buttons to add a new exercise ("Add" button)
+    $('.addExerToWO').attr('disabled', false);
+
+    // enable button to add a new exercise
+    $('.createNewExercise').attr('disabled', false);
+  } else {
+    // Offline handling...
+
+    // Put offline message on window.
+    const offlineMsg = '<p class="offline">You are now offline.  You can see the list of workouts, and the current workout, but you cannot add or change workouts or exercises.  Thank you for your patience.</p>';
+    $("h3").append(offlineMsg);
+
+    // disable buttons to add a new exercise ("Add" button)
+    $('.addExerToWO').attr('disabled', true);
+
+    // disable button to add a new exercise
+    $('.createNewExercise').attr('disabled', true);
+
+  };
+
+} // of updateStatus function
+
 
 function createExercise() {
   // get exercise information from html
@@ -172,6 +218,13 @@ function addExerciseToWorkout(id) {
 $(document).ready(() => {
   // get the current workout (also displays name on page)
   renderPage();
+
+  // window was loading part-way down.  Make it load at the top.
+  window.scrollTo(0,0);
+  
+  // Put notice on website and enable/disable buttons when online status changes
+  window.addEventListener('online', updateStatus);
+  window.addEventListener('offline', updateStatus);
 
   $(".allExercises").on("click", ".addExerToWO", function(event) {
     // get info from the html: _id of chosen exercise

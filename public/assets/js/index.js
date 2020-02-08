@@ -1,13 +1,21 @@
 // put current workout name and list of workouts on home page
 function renderHomePage() {
+  // If offline, add the offline message and disable the createNewWorkout button
+  console.log("In renderHomePage, navigator.onLine:");
+  console.log(navigator.onLine);
+  if (!navigator.onLine) {
+    console.log("offline, call renderOffline");
+    renderOffline();
+  };
+
   // get name of current workout from workouts collection
   $.get("api/workouts/current", workout => {
     // href is enabled if there is a current workout.
     let hrefEnabled =
-      '<a href="./workout.html" class="btn btn-default goToCurrent"></a>';
+      '<a href="./workout.html" class="btn btn-warning goToCurrent"></a>';
     // the element will be a disabled button if there is no current workout.
     let btnDisabled =
-      '<button class="btn btn-default goToCurrent" disabled>No current workout.</button>';
+      '<button class="btn btn-warning goToCurrent" disabled>No current workout.</button>';
 
     // if there is a current workout, put the name on the html page
     //   and enable the button (href) to go to the workout page with that workout
@@ -32,7 +40,8 @@ function renderHomePage() {
 } // end of renderHomePage function
 
 function loadWorkoutNames(workouts) {
-  let beginButton = '<br><button class="btn btn-default btnSpace" data-id=';
+  
+  let beginButton = `<br><button class="btn btn-warning btnSpace" data-id=`;
   let workoutButton = "";
 
   workouts.forEach(workout => {
@@ -40,50 +49,70 @@ function loadWorkoutNames(workouts) {
     if (typeof workout.current === "undefined" || !workout.current) {
       workoutButton = beginButton; // they all start the same
       workoutButton += `"${workout._id}" `; // add data-id with the _id of the workout
+      // disable button if offline
+      if (!navigator.onLine) {
+        workoutButton += 'disabled="disabled" ';
+      };
       workoutButton += `type="button">${workout.name}</button>`; // finish button elt, incl name of workout on button
-      //   workoutButton += '<br>'; // next button on a new line
-      $(".addWorkoutList").append(workoutButton); // add the button to the html
+      workoutButton += '<br>'; // next button on a new line
+      $(".addWorkoutList").append(workoutButton)  // add the button to the html
+      // console.log('In loadWorkoutNames: navigator.onLine');
+      // console.log(navigator.onLine);
+      // if (navigator.onLine) {
+      //   $(".addWorkoutList")
+      //     .append(workoutButton)
+      //     .attr("disabled", false); // add the button to the html
+      // } else {
+      //   $(".addWorkoutList")
+      //     .append(workoutButton)
+      //     .attr("disabled", true); // add the button to the html
+      // }
     } // end of if NOT the current workout
   }); // end of workouts.forEach
 } // end of loadWorkoutNames function
 
-
 // Puts message on window if offline, and disables buttons that won't work.
 // Takes disable message off, and enables buttons when back online.
 function updateStatus() {
-
-  alert(navigator.onLine);
   if (navigator.onLine) {
-    // remove offline message, if it was there.
-    $('.offline').remove();
-
-    // create and remove returning online message.
-    const offlineMsg = '<p class="online">You are now back online.  App is fully functional.  Thank you!</p>';
-    $("h3").append(offlineMsg);
-
-    // disable button to add a workout ("Go!" button)
-    $('.createNewWorkout').attr('disabled', false);
-
-    // diable buttons that go to different workouts
-    $('.btnSpace').attr('disabled', false);
+    // Online handling...
+    renderOnline();
   } else {
-    // remove online message, if it was there.
-    $('.online').remove();
-
-    // Put offline message on window.
-    const offlineMsg = '<p class="offline">You are now offline.  You can see the list of workouts, and the current workout, but you cannot add or change workouts or exercises.  Thank you for your patience.</p>';
-    $("h3").append(offlineMsg);
-
-    // disable button to add a workout ("Go!" button)
-    $('.createNewWorkout').attr('disabled', true);
-
-    // diable buttons that go to different workouts
-    $('.btnSpace').attr('disabled', true);
-
-  };
-
+    // Offline handling...
+    renderOffline();
+  }
 } // of updateStatus function
 
+function renderOnline() {
+  // Online handling...
+
+  // remove offline message, if it was there.
+  $(".offline").remove();
+
+  // enable button to add a workout ("Go!" button)
+  $(".createNewWorkout").attr("disabled", false);
+
+  // enable buttons that go to different workouts
+  $(".btnSpace").attr("disabled", false);
+} // of function renderOnline
+
+function renderOffline() {
+  console.log("In renderOffline");
+  // Offline handling...
+
+  // Put offline message on window.
+  const offlineMsg =
+    '<p class="offline">You are now offline.  You can see the list of workouts, and the current workout, but you cannot add or change workouts or exercises.  Thank you for your patience.</p>';
+  $("h3").append(offlineMsg);
+  console.log("added message");
+  // disable button to add a workout ("Go!" button)
+  $(".createNewWorkout").attr("disabled", true);
+  console.log("disabled create new workout button");
+
+  // disable buttons that go to different workouts
+  $(".btnSpace").attr("disabled", true);
+  console.log("disabled btnSpace buttons");
+} // of function renderOffline
 
 function createWorkout() {
   // get workout name from html
@@ -152,10 +181,13 @@ function goToOldWorkout(id) {
 // Wait until page is loaded
 $(document).ready(() => {
   renderHomePage();
-  
+
+  // window was loading part-way down.  Make it load at the top.
+  window.scrollTo(0,0);
+
   // Put notice on website and enable/disable buttons when online status changes
-  window.addEventListener('online', updateStatus);
-  window.addEventListener('offline', updateStatus);
+  window.addEventListener("online", updateStatus);
+  window.addEventListener("offline", updateStatus);
 
   // Clicking on current workout is handled in the html.
 

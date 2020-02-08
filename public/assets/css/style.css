@@ -23,11 +23,6 @@ p {
     font-size: 20px;
 }
 
-.online {
-    color: green;
-    font-size: 16px;
-}
-
 h1 {
     text-align: center;
     color: darkgreen;
@@ -52,7 +47,7 @@ h2 {
 
 /* tweak formatting of tables */
 /* td, th, tr, .execTableRow, .execInWOTableRow */
-/* .desc1 & 2, .unit1 & 2, .reps1 & 2, .time1 are column widths */
+/* .desc, .unit, .reps, .last are column widths */
 td, th {
     font-size: 18px;
 }
@@ -65,47 +60,12 @@ tr {
     background-color: rgb(252, 252, 137);
 }
 
-.desc2, .time1 {
-    width: 60%;
+.desc, .last {
+    width: 30%;
 }
 
-.desc1 {
-    width: 25%;
-}
-
-.unit1, .unit2 {
+.unit, .reps {
     width: 20%;
-}
-
-.reps1, .reps2 {
-    width: 15%;
-}
-
-/* this is an href...make it look similar to the buttons, with different background */
-.goToCurrent {
-    -webkit-appearance: button;
-    -webkit-writing-mode: horizontal-tb !important;
-    text-rendering: auto;
-    color: buttontext;
-    letter-spacing: normal;
-    word-spacing: normal;
-    text-transform: none;
-    text-indent: 0px;
-    text-shadow: none;
-    display: inline-block;
-    text-align: center;
-    align-items: flex-start;
-    cursor: default;
-    background-color: rgb(252, 252, 137);
-    text-decoration: none;
-    box-sizing: border-box;
-    margin: 0em;
-    font: 400 13.3333px Arial;
-    padding: 1px 6px;
-    border-width: 2px;
-    border-style: outset;
-    border-color: buttonface;
-    border-image: initial;
 }
 
 /* Space between choices, and nice indenting */
@@ -118,25 +78,36 @@ tr {
     margin-left: 15px;
 }
 
+/* highlight buttons when hovered
+.btnSpace:hover, .goToCurrent:hover, .createNewWorkout:hover, 
+.createNewExercise:hover, .addExerToWO:hover {
+    background-color: yellow;
+    color: red;
+    border-width: 2px;
+    border-color: grey;
+} */
+
 /* Space between buttons, and indent */
-.btnSpace {
-    margin-top: 15px;
+.btnSpace, .goToCurrent, .createNewWorkout, .createNewExercise {
+    background-color: rgb(252, 252, 137);
+    margin-left: 30px;
+    border-width: 2px;
+    border-color: grey;
 }
 
 /* indent buttons */
 .btnSpace, .input-group {
-    margin-left: 30px;
+    margin-top: 20px;
 }
 
 /* style button to add exercise to workout */
 .addExerToWO {
-    height: 24px;
     font-size: 12px;
     background-color: lightblue;
 }
 
-/* Space before button to add new exercise, and highlight */
+/* Space before button to add new exercise, and highlight 
 .createNewExercise, .createNewWorkout {
     margin-left: 15px;
     background-color: rgb(252, 252, 137);
-}
+} */
