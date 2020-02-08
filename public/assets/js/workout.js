@@ -6,7 +6,6 @@ let currentWO = ""; // object of current workout
 function renderPage() {
   // get name of CURRENT workout from workouts collection
   $.get("api/workout/populated", workout => {
-    console.log("1. In renderPage (workout.js)");
     if (workout.length == 0) {
       handleNoCurrentWO();
     } else {
@@ -17,7 +16,6 @@ function renderPage() {
 
       // put the workout name in the sub-header on the html page
       $("#workoutName").text(currentWO.name);
-      console.log("2. Workout name written to subheader");
 
       // get exercise ids for all exercises in the workout
       // exerIndicesInWO is an array of the _id of each exercise in the workout
@@ -45,7 +43,6 @@ function putExercisesOnHtml({ currentExercises, exerIndicesInWO }) {
   //  so we know we're building the lists from scratch
   $(".execInWOTableRow").remove(); // exercises in workout
   $(".execTableRow").remove(); // all available exercises
-  console.log("3. In putExercisesOnHtml, old exercises have been cleared out.");
 
 
   // get all exercises from db
@@ -154,7 +151,6 @@ function updateStatus() {
 
 function createExercise() {
   // get exercise information from html
-  console.log("In 'createExercise' -- button clicked.");
   let exerciseName = $("#exercise")
     .val()
     .trim();
@@ -165,15 +161,18 @@ function createExercise() {
     .val()
     .trim();
 
+  // ask for exercise name if it wasn't entered
   if (exerciseName === "") {
     $("#exercise").val("Exercise name required");
     return;
   }
 
+  // default unit is 1 (if not entered)
   if (unit === "") {
     unit = "1";
   }
 
+  // default reps is 1, if not entered
   if (reps === "") {
     reps = "1";
   }
@@ -235,7 +234,6 @@ $(document).ready(() => {
 
   // listen for (and handle) when button is clicked to create a new exercise
   $(".createNewExercise").on("click", () => {
-    console.log("About to call 'createExercise' -- button clicked.");
     createExercise();
   });
 });

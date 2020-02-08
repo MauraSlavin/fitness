@@ -1,10 +1,8 @@
 // put current workout name and list of workouts on home page
 function renderHomePage() {
   // If offline, add the offline message and disable the createNewWorkout button
-  console.log("In renderHomePage, navigator.onLine:");
-  console.log(navigator.onLine);
+
   if (!navigator.onLine) {
-    console.log("offline, call renderOffline");
     renderOffline();
   };
 
@@ -56,17 +54,7 @@ function loadWorkoutNames(workouts) {
       workoutButton += `type="button">${workout.name}</button>`; // finish button elt, incl name of workout on button
       workoutButton += '<br>'; // next button on a new line
       $(".addWorkoutList").append(workoutButton)  // add the button to the html
-      // console.log('In loadWorkoutNames: navigator.onLine');
-      // console.log(navigator.onLine);
-      // if (navigator.onLine) {
-      //   $(".addWorkoutList")
-      //     .append(workoutButton)
-      //     .attr("disabled", false); // add the button to the html
-      // } else {
-      //   $(".addWorkoutList")
-      //     .append(workoutButton)
-      //     .attr("disabled", true); // add the button to the html
-      // }
+
     } // end of if NOT the current workout
   }); // end of workouts.forEach
 } // end of loadWorkoutNames function
@@ -97,21 +85,18 @@ function renderOnline() {
 } // of function renderOnline
 
 function renderOffline() {
-  console.log("In renderOffline");
   // Offline handling...
 
   // Put offline message on window.
   const offlineMsg =
     '<p class="offline">You are now offline.  You can see the list of workouts, and the current workout, but you cannot add or change workouts or exercises.  Thank you for your patience.</p>';
   $("h3").append(offlineMsg);
-  console.log("added message");
+
   // disable button to add a workout ("Go!" button)
   $(".createNewWorkout").attr("disabled", true);
-  console.log("disabled create new workout button");
 
   // disable buttons that go to different workouts
   $(".btnSpace").attr("disabled", true);
-  console.log("disabled btnSpace buttons");
 } // of function renderOffline
 
 function createWorkout() {

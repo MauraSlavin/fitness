@@ -18,6 +18,7 @@ p {
     display: inline-flex;
 }
 
+/* highlight message when no access to internet. */
 .offline {
     color: red;
     font-size: 20px;
@@ -78,15 +79,6 @@ tr {
     margin-left: 15px;
 }
 
-/* highlight buttons when hovered
-.btnSpace:hover, .goToCurrent:hover, .createNewWorkout:hover, 
-.createNewExercise:hover, .addExerToWO:hover {
-    background-color: yellow;
-    color: red;
-    border-width: 2px;
-    border-color: grey;
-} */
-
 /* Space between buttons, and indent */
 .btnSpace, .goToCurrent, .createNewWorkout, .createNewExercise {
     background-color: rgb(252, 252, 137);
@@ -105,9 +97,3 @@ tr {
     font-size: 12px;
     background-color: lightblue;
 }
-
-/* Space before button to add new exercise, and highlight 
-.createNewExercise, .createNewWorkout {
-    margin-left: 15px;
-    background-color: rgb(252, 252, 137);
-} */
